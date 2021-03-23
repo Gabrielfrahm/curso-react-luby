@@ -3,6 +3,10 @@ import Aux from '../../../hoc/Auxi';
 import Backdrop from '../Backdrop';
 import { Container } from './styles';
 
+const componentUpdate = (nextProps, nextState) => {
+    return nextProps.show === nextState.show
+}
+
 const Modal = (props) => {
     return (
         <Aux>
@@ -17,4 +21,4 @@ const Modal = (props) => {
     );
 }
 
-export default Modal;
+export default React.memo(Modal, componentUpdate);
