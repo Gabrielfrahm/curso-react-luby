@@ -112,3 +112,10 @@ export const Bacon = styled.div`
     background: linear-gradient(#bf3813, #c45e38);
     margin: 2% auto;
 `
+export const Tomate = styled.div`
+    width: 70%;
+    height: 5%;
+    background: linear-gradient(#ff6347, #c45e38);
+    margin: 2% auto;
+    border-radius: 20px;
+`

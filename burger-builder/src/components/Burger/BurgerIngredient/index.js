@@ -1,5 +1,5 @@
 import React from 'react';
-import {BreadBottom, BreadTop, Seeds1, Seeds2, Meat, Salad, Bacon, Cheese} from './styles';
+import {BreadBottom, BreadTop, Seeds1, Seeds2, Meat, Salad, Bacon, Cheese, Tomate} from './styles';
 
 const BurgerIngredient = (props) => {
     let ingredient = null;
@@ -26,6 +26,9 @@ const BurgerIngredient = (props) => {
             break;
         case ('bacon'):
             ingredient = <Bacon></Bacon>;
+            break;
+        case ('tomate'):
+            ingredient = <Tomate></Tomate>;
             break;
         default :
             ingredient = null;

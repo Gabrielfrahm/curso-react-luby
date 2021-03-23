@@ -19,6 +19,8 @@ const Burger = (props) => {
         }
 
         console.log(transformedIngredients);
+        console.log(props.price);
+        
     return (
         <BurgerDiv>
             <BurgerIngredient types="bread-top" />

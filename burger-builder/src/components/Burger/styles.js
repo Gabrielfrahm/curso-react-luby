@@ -4,7 +4,7 @@ export const BurgerDiv = styled.div`
     width: 100%;
     margin: auto;
     height: 250px;
-    overflow: scroll;
+    overflow-y: auto;
     text-align: center;
     font-weight: bold;
     font-size: 1.2rem;
@@ -21,7 +21,7 @@ export const BurgerDiv = styled.div`
 
     @media (min-width: 1000px) and (min-height: 700px) {
         width: 700px;
-        height: 600px;
+        height: 540px;
         
     }
 `;
