@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from "react";
-import Aux from '../../hoc/Auxi';
-import SideDrawer from "../Navigation/SideDrawer";
-import Toolbar from '../Navigation/Toolbar';
+import Aux from '../Auxi';
+import SideDrawer from "../../components/Navigation/SideDrawer";
+import Toolbar from '../../components/Navigation/Toolbar';
 import {Content} from './styles';
 
 const Layout = (props) => {

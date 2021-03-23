@@ -12,6 +12,7 @@ export const Container = styled.div`
     top: 30%;
     box-sizing: border-box;
     transition: all 0.3s ease-out;
+    border-radius: 20px;
 
     
     @media (min-width: 600px) {
