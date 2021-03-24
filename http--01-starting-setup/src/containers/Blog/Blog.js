@@ -4,14 +4,15 @@ import Post from '../../components/Post/Post';
 import FullPost from '../../components/FullPost/FullPost';
 import NewPost from '../../components/NewPost/NewPost';
 import './Blog.css';
-import axios from 'axios';
+import instance from '../../axios';
+
 
 const Blog = (props) => {
     const [posts, setPosts] = useState([]);
     const [ids, setIds] = useState(null);
 
     useEffect(() => {
-        axios.get('https://jsonplaceholder.typicode.com/posts').then(
+        instance.get('/posts').then(
             response => {
                 const responsePosts = response.data.slice(0, 4);
                 const updatedPost = responsePosts.map(p => {

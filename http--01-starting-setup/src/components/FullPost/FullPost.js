@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useCallback, useEffect, useState } from 'react';
 
+import instance from '../../axios';
 
 import './FullPost.css';
 
@@ -9,7 +9,7 @@ const FullPost = (props) => {
 
     useEffect(() => {
         if (props.id) {
-            axios.get(`https://jsonplaceholder.typicode.com/posts/${props.id}`).then(
+            instance.get(`/posts/${props.id}`).then(
                 response => {
                     console.log(response.data);
                     return setPosts(response.data)
@@ -17,7 +17,15 @@ const FullPost = (props) => {
             )
         }
         return;
-    }, [props.id])
+    }, [props.id]);
+
+    const handleDeletePostById = useCallback(() => {
+        instance.delete(`/posts/${props.id}`).then(
+            response => {
+                console.log(response);
+            }
+        )
+    })
 
     let post = <p style={{ textAlign: 'center' }}>Please select a Post!</p>;
    
@@ -25,9 +33,9 @@ const FullPost = (props) => {
             post = (
                 <div className="FullPost">
                     <h1>{posts.title}</h1>
-                    <p>Content</p>
+                    <p>{posts.body}</p>
                     <div className="Edit">
-                        <button className="Delete">Delete</button>
+                        <button onClick={handleDeletePostById} className="Delete">Delete</button>
                     </div>
                 </div>
     

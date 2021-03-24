@@ -1,12 +1,28 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
 import './NewPost.css';
+import instance from '../../axios';
+
 
 const NewPost = () => {
 
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [author, setAuthor] = useState('Max');
+
+   
+    const handlePostData = useCallback(() => {
+        const data = {
+            'title' : title,
+            'body': content,
+            'author' : author,
+        }
+        instance.post('/posts', data).then(
+            response => {
+                console.log(response);
+            }
+        );
+    });
 
         return (
             <div className="NewPost">
@@ -20,7 +36,7 @@ const NewPost = () => {
                     <option value="Max">Max</option>
                     <option value="Manu">Manu</option>
                 </select>
-                <button>Add Post</button>
+                <button onClick={handlePostData} >Add Post</button>
             </div>
         );
 }
