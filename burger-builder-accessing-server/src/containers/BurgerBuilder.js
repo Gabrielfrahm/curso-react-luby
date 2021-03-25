@@ -6,6 +6,7 @@ import OrderSummary from '../components/Burger/OrderSummary';
 import Modal from '../components/UI/Modal';
 import Spinner from '../components/UI/Spinner';
 import Aux from '../hoc/Auxi';
+import WithErrorHandler from '../hoc/WithErrorHendler';
 
 const INGREDIENT_PRICES = {
     salad: 0.5,
@@ -21,7 +22,7 @@ const state = {
         tomate: 0,
         bacon: 0,
         cheese: 0,
-        meat: 0,
+        meat: 0, 
     },
     totalPrice: 4,
     purchaseable: false,
@@ -163,4 +164,5 @@ const BurgerBuilder = () => {
     );
 }
 
-export default BurgerBuilder;
+// eslint-disable-next-line import/no-anonymous-default-export
+export default () => WithErrorHandler(BurgerBuilder, api)();

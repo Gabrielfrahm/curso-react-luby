@@ -3,7 +3,7 @@ import Layout from './hoc/Layout';
 import BurgerBuilder from './containers/BurgerBuilder';
 
 
-function App() {
+const App = () =>  {
   return (
     <div>
       <Layout>
