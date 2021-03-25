@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 
 import './NewPost.css';
-import instance from '../../axios';
+import instance from '../../../axios';
 
 
 const NewPost = () => {

@@ -1,53 +1,21 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React from 'react';
+import Post from './Posts/Posts';
+import NewPost from './NewPost/NewPost';
+import {Link, Route} from 'react-router-dom';
 
-import Post from '../../components/Post/Post';
-import FullPost from '../../components/FullPost/FullPost';
-import NewPost from '../../components/NewPost/NewPost';
 import './Blog.css';
-import instance from '../../axios';
-
 
 const Blog = (props) => {
-    const [posts, setPosts] = useState([]);
-    const [ids, setIds] = useState(null);
-
-    useEffect(() => {
-        instance.get('/posts').then(
-            response => {
-                const responsePosts = response.data.slice(0, 4);
-                const updatedPost = responsePosts.map(p => {
-                    return {
-                        ...p,
-                        author: 'Gabriel'
-                    }
-                })
-                return setPosts(updatedPost);
-            }
-        )
-    }, []);
-
-    const handlePostSelected = useCallback((id) => {
-        return setIds(id);
-    }, []);
-
     return (
-        <div>
-            <section className="Posts">
-                {posts.map(p => {
-                    return <Post
-                        title={p.title}
-                        key={p.id}
-                        author={p.author}
-                        clicked={() => handlePostSelected(p.id)}
-                    />
-                })}
-            </section>
-            <section>
-                <FullPost id={ids} />
-            </section>
-            <section>
-                <NewPost />
-            </section>
+        <div className="blog">
+            <header>
+                <ul>
+                    <li><Link to="/">Home</Link></li>
+                    <li><Link to="/new-post">New Post</Link></li>
+                </ul>
+            </header>
+            <Route path="/" exact component={Post} />
+            <Route path="/new-post" component={NewPost} />
         </div>
     );
 }
