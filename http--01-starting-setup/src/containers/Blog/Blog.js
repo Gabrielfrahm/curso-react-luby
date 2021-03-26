@@ -17,6 +17,7 @@ const Blog = (props) => {
             <Switch>
                 <Route path="/new-post" component={NewPost} />
                 <Route path="/posts" component={Post} />
+                <Route path="/" exact component={Post} />
             </Switch>
         </div>
     );
