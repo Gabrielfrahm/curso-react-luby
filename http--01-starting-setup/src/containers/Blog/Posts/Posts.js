@@ -1,11 +1,14 @@
-import React , {useEffect, useState, useCallback} from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
+import { Route } from 'react-router-dom';
 import instance from '../../../axios';
 import Post from '../../../components/Post/Post';
+import FullPost from '../FullPost/FullPost';
+
 import './Posts.css';
 
 const Posts = (props) => {
     const [posts, setPosts] = useState([]);
-    const [ids, setIds] = useState(null);
+    const [, setIds] = useState(null);
 
     useEffect(() => {
         instance.get('/posts').then(
@@ -22,22 +25,30 @@ const Posts = (props) => {
         )
     }, []);
 
-
     const handlePostSelected = useCallback((id) => {
+        props.history.push(`/posts/${id}`);
         return setIds(id);
     }, []);
 
     return (
-        <section className="Posts">
+        <div >
+            <section className="Posts">
                 {posts.map(p => {
-                    return <Post
-                        title={p.title}
-                        key={p.id}
-                        author={p.author}
-                        clicked={() => handlePostSelected(p.id)}
-                    />
+                    return (
+                        // <Link key={p.id} to={`/${p.id}`}>
+
+                        <Post
+                            key={p.id}
+                            title={p.title}
+                            author={p.author}
+                            clicked={() => handlePostSelected(p.id)}
+                        /> 
+                    // </Link>
+                    )
                 })}
-            </section>        
+            </section>
+             <Route path={props.match.url + '/:id'} exact component={FullPost} />  
+        </div>
     )
 }
 
