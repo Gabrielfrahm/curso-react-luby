@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from 'react';
+import {useHistory} from 'react-router';
 import api from '../axios-orders';
 import Burger from '../components/Burger';
 import BuildControls from '../components/Burger/BuildControls';
@@ -38,9 +39,10 @@ const BurgerBuilder = () => {
     const [purchasing, setPurchasing] = useState(state.purchasing);
     const [loading, setLoading] = useState(state.loading);
 
+    const history = useHistory();
+
 
     const updatePurchaseState = useCallback((ingredients) => {
-
         const sum = Object.keys(ingredients).map(igKey => {
             return ingredients[igKey]
         }).reduce((sum, el) => {
@@ -99,30 +101,31 @@ const BurgerBuilder = () => {
     const handlePurchaseContinue = () => {
         // alert('You continue');
         setLoading(true);
-        const order = {
-            ingredient: ingredient,
-            price: price,
-            customer: {
-                name: 'Gabriel Marques',
-                address: {
-                    street: 'TestStreet',
-                    zipCode: '43156',
-                    country: 'Brazil'
-                },
-                email: 'teste@teste.com',
-            },
-            deliveryMethod: 'fastest',
-        }
-        api.post(`/orders.json`, order).then(
-            response => {
-                setLoading(false);
-                setPurchasing(false)
-            }
-        )
-        .catch(error => {
-            setLoading(false);
-            setPurchasing(false);  
-        });
+        // const order = {
+        //     ingredient: ingredient,
+        //     price: price,
+        //     customer: {
+        //         name: 'Gabriel Marques',
+        //         address: {
+        //             street: 'TestStreet',
+        //             zipCode: '43156',
+        //             country: 'Brazil'
+        //         },
+        //         email: 'teste@teste.com',
+        //     },
+        //     deliveryMethod: 'fastest',
+        // }
+        // api.post(`/orders.json`, order).then(
+        //     response => {
+        //         setLoading(false);
+        //         setPurchasing(false)
+        //     }
+        // )
+        // .catch(error => {
+        //     setLoading(false);
+        //     setPurchasing(false);  
+        // });
+        history.push('/checkout')
     }
 
     // copy the ingredients for check
