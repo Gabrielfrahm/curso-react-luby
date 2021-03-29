@@ -10,10 +10,6 @@ export const Container = styled.div`
      
 
     @media (min-width: 600px){
-        width: 500px;
+        width: 80%;
     }
 `
-
-export const Input  = styled.input`
-    display: block;
-`;
