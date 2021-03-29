@@ -101,31 +101,17 @@ const BurgerBuilder = () => {
     const handlePurchaseContinue = () => {
         // alert('You continue');
         setLoading(true);
-        // const order = {
-        //     ingredient: ingredient,
-        //     price: price,
-        //     customer: {
-        //         name: 'Gabriel Marques',
-        //         address: {
-        //             street: 'TestStreet',
-        //             zipCode: '43156',
-        //             country: 'Brazil'
-        //         },
-        //         email: 'teste@teste.com',
-        //     },
-        //     deliveryMethod: 'fastest',
-        // }
-        // api.post(`/orders.json`, order).then(
-        //     response => {
-        //         setLoading(false);
-        //         setPurchasing(false)
-        //     }
-        // )
-        // .catch(error => {
-        //     setLoading(false);
-        //     setPurchasing(false);  
-        // });
-        history.push('/checkout')
+       
+        const queryParams = [];
+        for (let i in state.ingredients){
+            queryParams.push(encodeURIComponent(i) + '=' + encodeURIComponent(state.ingredients[i])) 
+        }
+        queryParams.push('price=' + price)
+        const queryString = queryParams.join('&');
+        history.push({
+            pathname: '/checkout',
+            search : '?' + queryString,
+        })
     }
 
     // copy the ingredients for check

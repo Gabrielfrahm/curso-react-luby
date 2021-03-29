@@ -6,8 +6,8 @@ import {Ul} from './styles';
 const NavigationItems = () => {
     return (
         <Ul>
-            <NavigationItem link='/' active>Burger Builder</NavigationItem>
-            <NavigationItem link='/'>Checkout</NavigationItem>
+            <NavigationItem link='/' exact >Burger Builder</NavigationItem>
+            <NavigationItem link='/Orders'>Orders</NavigationItem>
         </Ul>
     );
 }
