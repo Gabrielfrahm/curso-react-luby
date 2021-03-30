@@ -6,7 +6,7 @@ import { Container } from './styles';
 import Spinner from '../../components/UI/Spinner';
 import Input from '../../components/UI/Input';
 
-const orderForm = {
+let orderForm = {
     name: {
         elementType: 'input',
         elementConfig: {
@@ -14,6 +14,10 @@ const orderForm = {
             placeholder: 'Your name'
         },
         value: '',
+        validation: {
+            required: true,
+        },
+        valid: false,
     },
 
     email: {
@@ -23,6 +27,10 @@ const orderForm = {
             placeholder: 'Your email'
         },
         value: '',
+        validation: {
+            required: true,
+        },
+        valid: false,
     },
 
     street: {
@@ -32,6 +40,10 @@ const orderForm = {
             placeholder: 'Street'
         },
         value: '',
+        validation: {
+            required: true,
+        },
+        valid: false,
     },
 
     zipCode: {
@@ -41,6 +53,10 @@ const orderForm = {
             placeholder: 'ZIP code'
         },
         value: '',
+        validation: {
+            required: true,
+        },
+        valid: false,
     },
 
     country: {
@@ -50,8 +66,11 @@ const orderForm = {
             placeholder: 'Your country',
         },
         value: '',
+        validation: {
+            required: true,
+        },
+        valid: false,
     },
-
     deliveryMethod: {
         elementType: 'select',
         elementConfig: {
@@ -62,41 +81,41 @@ const orderForm = {
             ]
         },
         value: '',
+        validation: {
+            required: false,
+        },
+        valid: false
     },
 }
 
 
 const ContactData = (props) => {
-    const [,setOrder] = useState(orderForm);
-    // const [name, setName] = useState({
-
-    // });
-    // const [email, setEmail] = useState({
-
-    // });
-    // const [street, setStreet] = useState({
-
-    // });
-
-    // const [zipCode, setZipCode] = useState({
-
-    // });
-
-    // const [country, setCountry] = useState({
-
-    // });
-
-    // const [deliveryMethod, setDeliveryMethod] = useState({
-
-    // })
+    const [, setOrder] = useState(orderForm);
     const [loading, setLoading] = useState();
     const history = useHistory();
 
+
+    const checkValidity = (value, rules)=>{
+        let isValid = true;
+        if(rules.required){
+            isValid = value.trim() !== '' && isValid;
+        }
+        if(rules.minLength){
+            isValid = value.length >= rules.minLength && isValid;
+        }
+        return isValid;
+    };
+
     const handleOrder = useCallback((event) => {
         event.preventDefault();
-        console.log(props.ingredients);
+        setLoading(true);
+        const formData = {};
+        for(let formElementIdentifier in  orderForm){
+            formData[formElementIdentifier] = orderForm[formElementIdentifier].value;
+        }
         const order = {
             ingredients: props.ingredients,
+            orderData: formData,
             price: props.price
         }
         api.post(`/orders.json`, order).then(
@@ -109,7 +128,22 @@ const ContactData = (props) => {
                 setLoading(false);
 
             });
-    }, [props.ingredients, props.price, history]);
+    }, [props.ingredients, props.price,  history]);
+    
+
+    const handlerInput = useCallback((event, inputIdentifier)=>{
+        const updateOrderForm = {
+            ...orderForm
+        }
+        const updateFormElement = {
+            ...updateOrderForm[inputIdentifier]
+        };
+        updateFormElement.value = event.target.value;
+        updateFormElement.valid = checkValidity(updateFormElement.value,updateFormElement.validation)
+        updateOrderForm[inputIdentifier] = updateFormElement;
+        setOrder(orderForm = updateOrderForm);
+        console.log(updateFormElement)
+    }, []);
 
     const formElementsArray = [];
     for(let key in orderForm){
@@ -118,18 +152,7 @@ const ContactData = (props) => {
             config: orderForm[key]
         })
     }
-
-    const handlerInput = useCallback((event, inputIdentifier)=>{
-        const updateOrderForm = {
-            ...orderForm
-        }
-
-        const updateFormElement = {...updateOrderForm[inputIdentifier]};
-        updateFormElement.value = event.target.value;
-        updateOrderForm[inputIdentifier] = updateFormElement;
-        setOrder(updateOrderForm);
-        console.log(orderForm);
-    }, [])
+    
 
     return (
         <Container>
@@ -137,18 +160,20 @@ const ContactData = (props) => {
             {loading ? (
                 <Spinner />
             ) : (
-                <form action="">
+                <form onSubmit={handleOrder}>
                     {formElementsArray.map(fe => (
                         <Input
                             key={fe.id}
                             elementType={fe.config.elementType}
                             elementConfig={fe.config.elementConfig}
                             value={fe.config.value}
+                            invalid={!fe.config.valid}
+                            shouldValidate={fe.config.validation}
                             changed={(event) => handlerInput(event,fe.id)}
                         />
                     ))}
                     <Button
-                        clicked={handleOrder}
+        
                     >Order</Button>
                 </form>
             )}

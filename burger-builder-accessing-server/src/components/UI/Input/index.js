@@ -14,7 +14,7 @@ const Input = (props) => {
         case ('select') :
             inputElement = <Select {...props.elementConfig} defaultValue={props.value} onChange={props.changed}>
                 {props.elementConfig.options.map(op => (
-                    <option key={op.value} value={op.value}>{op.displayValue}</option>
+                    <option key={op.value} defaultValue={op.value}>{op.displayValue}</option>
                 ))}
             </Select>
         break;

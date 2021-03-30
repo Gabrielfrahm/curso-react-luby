@@ -1,5 +1,5 @@
-import React, { useCallback, useState } from 'react';
-import {useHistory} from 'react-router';
+import React, { useCallback,  useState } from 'react';
+import { useHistory } from 'react-router';
 import api from '../axios-orders';
 import Burger from '../components/Burger';
 import BuildControls from '../components/Burger/BuildControls';
@@ -23,7 +23,7 @@ const state = {
         tomate: 0,
         bacon: 0,
         cheese: 0,
-        meat: 0, 
+        meat: 0,
     },
     totalPrice: 4,
     purchaseable: false,
@@ -101,16 +101,16 @@ const BurgerBuilder = () => {
     const handlePurchaseContinue = () => {
         // alert('You continue');
         setLoading(true);
-       
+
         const queryParams = [];
-        for (let i in state.ingredients){
-            queryParams.push(encodeURIComponent(i) + '=' + encodeURIComponent(state.ingredients[i])) 
+        for (let i in state.ingredients) {
+            queryParams.push(encodeURIComponent(i) + '=' + encodeURIComponent(state.ingredients[i]))
         }
         queryParams.push('price=' + price)
         const queryString = queryParams.join('&');
         history.push({
             pathname: '/checkout',
-            search : '?' + queryString,
+            search: '?' + queryString,
         })
     }
 
@@ -131,7 +131,7 @@ const BurgerBuilder = () => {
         price={price.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}
     />
 
-    if(loading){
+    if (loading) {
         orderSummary = <Spinner />
     }
 

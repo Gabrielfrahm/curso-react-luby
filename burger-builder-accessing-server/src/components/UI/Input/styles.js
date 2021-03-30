@@ -23,6 +23,7 @@ export const Inputs = styled.input`
         outline: none;
         background-color: #ccc;
     }
+
 `;
 
 

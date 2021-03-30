@@ -9,6 +9,7 @@ const Orders = (props) => {
     const [, setLoading] = useState(true);
 
     useEffect(()=> {
+        setLoading(true);
         api.get('/orders.json').then(
             response => {
                 const orderList = [];
@@ -17,6 +18,7 @@ const Orders = (props) => {
                         ...response.data[key],
                         id: key,
                     });
+                   
                 }
                 setOrders(orderList);
                 setLoading(false);
@@ -30,7 +32,7 @@ const Orders = (props) => {
         <div>
             {orders.map(order => (
                 <Order key={order.id} 
-                    ingredients={order.ingredient}
+                    ingredients={order.ingredients}
                     price={+order.price}
                 />
             ))}
