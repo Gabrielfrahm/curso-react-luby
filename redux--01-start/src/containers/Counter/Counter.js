@@ -2,30 +2,9 @@ import React  from 'react';
 import {connect} from 'react-redux';
 import CounterControl from '../../components/CounterControl/CounterControl';
 import CounterOutput from '../../components/CounterOutput/CounterOutput';
+import * as actionsType from '../../store/actions';
 
 const  Counter = (props) =>  {
-    // let state = {
-    //     counter: 0
-    // }
-    // const [count, setCount] = useState(state.counter);
-
-    // let counterChangedHandler = ( action, value ) => {
-    //     switch ( action ) {
-    //         case 'inc':
-    //             setCount(count + 1)
-    //             break;
-    //         case 'dec':
-    //             setCount( count - 1)
-    //             break;
-    //         case 'add':
-    //             setCount( count + value  )
-    //             break;
-    //         case 'sub':
-    //             setCount( count - value  )
-    //             break;
-    //     }
-    // }
-
         return (
             <div>
                 <CounterOutput value={props.ctr} />
@@ -33,6 +12,13 @@ const  Counter = (props) =>  {
                 <CounterControl label="Decrement" clicked={props.onIDecrementCounter}  />
                 <CounterControl label="Add 5" clicked={props.onAddCounter}  />
                 <CounterControl label="Subtract 5" clicked={props.onSubtractCounter}  />
+                <hr/>
+                <button onClick={() => props.onStoreResult(props.ctr)}>Store Result</button>
+                <ul>
+                    {props.storedResult.map(strResult => (
+                        <li key={strResult.id} onClick={() => props.onDeleteResult(strResult.id)}>{strResult.value}</li>
+                    ))}
+                </ul>
             </div>
         );
 
@@ -40,16 +26,19 @@ const  Counter = (props) =>  {
 
 const mapStateToProps = state =>{
     return {
-        ctr: state.counter
+        ctr: state.ctr.counter,
+        storedResult: state.res.result
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        onIncrementCounter: () => dispatch({type: 'INCREMENT'}),
-        onIDecrementCounter: () => dispatch({type: 'DECREMENT'}),
-        onAddCounter: () => dispatch({type: 'ADD', val: 5}),
-        onSubtractCounter: () => dispatch({type: 'SUBTRACT', val: 5}),
+        onIncrementCounter: () => dispatch({type: actionsType.INCREMENT}),
+        onIDecrementCounter: () => dispatch({type: actionsType.DECREMENT}),
+        onAddCounter: () => dispatch({type: actionsType.ADD, val: 5}),
+        onSubtractCounter: () => dispatch({type: actionsType.SUBTRACT, val: 5}),
+        onStoreResult: (result) => dispatch({type: actionsType.STORE_RESULT, result: result}),
+        onDeleteResult: (id) => dispatch({type: actionsType.DELETE_RESULT, resElId: id}),
     }
 }
 
