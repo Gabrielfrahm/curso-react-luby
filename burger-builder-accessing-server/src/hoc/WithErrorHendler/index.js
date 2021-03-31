@@ -3,35 +3,38 @@ import Modal from '../../components/UI/Modal';
 import Aux from '../Auxi';
 
 const WithErrorHandler = (WrapperComponent, api) => {
-    const [error, setError] = useState(null);
 
-    const reqInter = api.interceptors.request.use(req => {
-        setError(null);
-        return req;
-    })
+    return props => {
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+        const [error, setError] = useState(null);
 
-    const resInter = api.interceptors.response.use(res => {
-        return res;
-    }, err => {
-        setError(err);
-        return Promise.reject(err);
-    })
+        const reqInter = api.interceptors.request.use(req => {
+            setError(null);
+            return req;
+        })
 
-    console.log(error);
+        const resInter = api.interceptors.response.use(res => {
+            return res;
+        }, err => {
+            setError(err);
+            return Promise.reject(err);
+        })
 
-    useEffect(() => {
-        return () => {
-            api.interceptors.request.eject(reqInter)
-            api.interceptors.response.eject(resInter)
+        console.log(error);
+        
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+        useEffect(() => {
+            return () => {
+                api.interceptors.request.eject(reqInter)
+                api.interceptors.response.eject(resInter)
+            }
+        }, [resInter, reqInter])
+
+
+        const handleErrorConfirm = () => {
+            setError(null);
         }
-    },[resInter, reqInter,  api.interceptors.request,  api.interceptors.response])
-    
-    
-    const handleErrorConfirm = () => {
-        setError(null);
-    }
 
-    return (props) => {
         return (
             <Aux>
                 <Modal show={error} modalClose={handleErrorConfirm} >
