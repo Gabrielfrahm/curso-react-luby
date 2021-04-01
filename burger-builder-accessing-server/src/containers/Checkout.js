@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { connect } from 'react-redux';
 import { Route } from 'react-router';
 import CheckoutSummary from '../components/Order/CheckoutSummary';
 import ContactData from './ContactData';
@@ -35,13 +36,20 @@ const Checkout = (props) => {
     return (
         <div>
             <CheckoutSummary 
-                ingredients={ingredient}
+                ingredients={props.ings}
                 checkoutCancelled={handleCanceled}
                 checkoutContinued={handleContinued} 
             />
-            <Route path={props.match.path + '/contact-data'} render={() => ( <ContactData ingredients={ingredient} price={price}/>)} />
+            <Route path={props.match.path + '/contact-data'} component={ContactData} />
         </div>
     );
 }
 
-export default Checkout;
+const mapStateToProps = state => {
+    return {
+        ings: state.ingredients,
+        price: state.totalPrice
+    }
+}
+
+export default connect(mapStateToProps)(Checkout);

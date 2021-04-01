@@ -5,6 +5,7 @@ import { useHistory } from 'react-router-dom';
 import { Container } from './styles';
 import Spinner from '../../components/UI/Spinner';
 import Input from '../../components/UI/Input';
+import { connect } from 'react-redux';
 
 let orderForm = {
     name: {
@@ -114,7 +115,7 @@ const ContactData = (props) => {
             formData[formElementIdentifier] = orderForm[formElementIdentifier].value;
         }
         const order = {
-            ingredients: props.ingredients,
+            ingredients: props.ings,
             orderData: formData,
             price: props.price
         }
@@ -128,7 +129,7 @@ const ContactData = (props) => {
                 setLoading(false);
 
             });
-    }, [props.ingredients, props.price,  history]);
+    }, [props.ings, props.price,  history]);
     
 
     const handlerInput = useCallback((event, inputIdentifier)=>{
@@ -183,5 +184,11 @@ const ContactData = (props) => {
 
 }
 
+const mapStateToProps = state => {
+    return {
+        ings: state.ingredients,
+        price: state.totalPrice,
+    }
+}
 
-export default ContactData;
+export default  connect(mapStateToProps)(ContactData);

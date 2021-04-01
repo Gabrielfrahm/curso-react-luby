@@ -48,16 +48,13 @@ const BurgerBuilder = (props) => {
         // alert('You continue');
         setLoading(true);
 
-        const queryParams = [];
-        for (let i in props.ings) {
-            queryParams.push(encodeURIComponent(i) + '=' + encodeURIComponent(props.ings[i]))
-        }
-        queryParams.push('price=' + props.price)
-        const queryString = queryParams.join('&');
-        history.push({
-            pathname: '/checkout',
-            search: '?' + queryString,
-        })
+        // const queryParams = [];
+        // for (let i in props.ings) {
+        //     queryParams.push(encodeURIComponent(i) + '=' + encodeURIComponent(props.ings[i]))
+        // }
+        // queryParams.push('price=' + props.price)
+        // const queryString = queryParams.join('&');
+        history.push('/checkout');
     }
 
     // copy the ingredients for check
