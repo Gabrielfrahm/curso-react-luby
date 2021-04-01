@@ -1,4 +1,4 @@
-import React, { useCallback,  useEffect,  useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import {connect} from 'react-redux';
 import { useHistory } from 'react-router';
 import api from '../axios-orders';
@@ -11,20 +11,14 @@ import Aux from '../hoc/Auxi';
 import WithErrorHandler from '../hoc/WithErrorHendler';
 import * as actionsTypes from '../store/actions';
 
-const INGREDIENT_PRICES = {
-    salad: 0.5,
-    cheese: 0.4,
-    meat: 1.3,
-    bacon: 1.0,
-    tomate: 0.5,
-}
 
-const states = {
-    totalPrice: 4,
-}
+
+// const states = {
+//     totalPrice: 4,
+// }
 
 const BurgerBuilder = (props) => {
-    const [price, setPrice] = useState(states.totalPrice); 
+    // const [price, setPrice] = useState(states.totalPrice); 
     const [purchasing, setPurchasing] = useState(false);
     const [loading, setLoading] = useState(false);
 
@@ -58,7 +52,7 @@ const BurgerBuilder = (props) => {
         for (let i in props.ings) {
             queryParams.push(encodeURIComponent(i) + '=' + encodeURIComponent(props.ings[i]))
         }
-        queryParams.push('price=' + price)
+        queryParams.push('price=' + props.price)
         const queryString = queryParams.join('&');
         history.push({
             pathname: '/checkout',
@@ -70,7 +64,7 @@ const BurgerBuilder = (props) => {
     const disabledInfo = {
         ...props.ings
     };
-
+    
     // check the ingredients 
     for (let key in disabledInfo) {
         disabledInfo[key] = disabledInfo[key] <= 0
@@ -80,7 +74,7 @@ const BurgerBuilder = (props) => {
         ingredients={props.ings}
         purchaseCanceled={handlePurchaseCancel}
         purchaseContinued={handlePurchaseContinue}
-        price={price.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}
+        price={props.price.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}
     />
 
     if (loading) {
@@ -92,14 +86,14 @@ const BurgerBuilder = (props) => {
             <Modal show={purchasing} modalClose={handlePurchaseCancel}>
                 {orderSummary}
             </Modal>
-            <Burger ingredients={props.ings} price={price} />
+            <Burger ingredients={props.ings} price={props.price} />
             <BuildControls
                 ingredientAdded={props.onIngredientAdded}
                 ingredientRemoved={props.onIngredientRemoved}
                 disabled={disabledInfo}
                 ordered={handlePurchase}
-                purchaseable={updatePurchaseState}
-                price={price.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}
+                purchaseable={updatePurchaseState(props.ings)}
+                price={props.price.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}
             />
         </Aux>
     );
@@ -108,6 +102,7 @@ const BurgerBuilder = (props) => {
 const mapStateToProps = state => {
     return {
         ings: state.ingredients,
+        price: state.totalPrice,
     }
 }
 
