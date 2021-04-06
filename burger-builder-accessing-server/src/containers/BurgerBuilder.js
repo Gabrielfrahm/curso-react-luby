@@ -9,7 +9,7 @@ import Modal from '../components/UI/Modal';
 import Spinner from '../components/UI/Spinner';
 import Aux from '../hoc/Auxi';
 import WithErrorHandler from '../hoc/WithErrorHendler';
-import * as burgerBuilderAction from '../store/actions/index';
+import * as actions from '../store/actions/index';
 
 
 const BurgerBuilder = (props) => {
@@ -41,7 +41,7 @@ const BurgerBuilder = (props) => {
     const handlePurchaseContinue = () => {
         // alert('You continue');
         setLoading(true);
-
+        props.onInitPurchase();
         history.push('/checkout');
     }
 
@@ -86,17 +86,19 @@ const BurgerBuilder = (props) => {
 
 const mapStateToProps = state => {
     return {
-        ings: state.ingredients,
-        price: state.totalPrice,
-        error: state.error,
+        ings: state.burgerBuilder.ingredients,
+        price: state.burgerBuilder.totalPrice,
+        error: state.burgerBuilder.error,
+        purchased: state.order.purchased,
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        onIngredientAdded : (ingName) => dispatch(burgerBuilderAction.addIngredient(ingName)),
-        onIngredientRemoved: (ingName) => dispatch(burgerBuilderAction.removeIngredient(ingName)),
-        onInitIngredients: () => dispatch(burgerBuilderAction.initIngredients()),
+        onIngredientAdded : (ingName) => dispatch(actions.addIngredient(ingName)),
+        onIngredientRemoved: (ingName) => dispatch(actions.removeIngredient(ingName)),
+        onInitIngredients: () => dispatch(actions.initIngredients()),
+        onInitPurchase: () => dispatch(actions.purchaseInit()),
     }
 }
 

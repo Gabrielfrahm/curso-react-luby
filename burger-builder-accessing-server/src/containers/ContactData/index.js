@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import Button from '../../components/UI/Button';
 import api from '../../axios-orders';
 import WithErrorHandler from '../../hoc/WithErrorHendler'
-// import { useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { Container } from './styles';
 import Spinner from '../../components/UI/Spinner';
 import Input from '../../components/UI/Input';
@@ -84,7 +84,7 @@ let orderForm = {
 
             ]
         },
-        value: '',
+        value: 'fastest',
         validation: {
             required: false,
         },
@@ -96,7 +96,7 @@ let orderForm = {
 const ContactData = (props) => {
     const [, setOrder] = useState(orderForm);
     // const [loading, setLoading] = useState();
-    // const history = useHistory();
+    const history = useHistory();
 
 
     const checkValidity = (value, rules)=>{
@@ -124,6 +124,7 @@ const ContactData = (props) => {
         }
 
         props.onOrderBurger(order);
+        history.push('/');
         // api.post(`/orders.json`, order).then(
         //     response => {
         //         setLoading(false);
@@ -134,7 +135,7 @@ const ContactData = (props) => {
         //         setLoading(false);
 
         //     });
-    }, [props]);
+    }, [props, history]);
     
 
     const handlerInput = useCallback((event, inputIdentifier)=>{
@@ -189,9 +190,9 @@ const ContactData = (props) => {
 
 const mapStateToProps = state => {
     return {
-        ings: state.ingredients,
-        price: state.totalPrice,
-        loading: state.loading,
+        ings: state.burgerBuilder.ingredients,
+        price: state.burgerBuilder.totalPrice,
+        loading: state.order.loading,
     }
 }
 

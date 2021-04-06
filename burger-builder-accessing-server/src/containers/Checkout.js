@@ -1,8 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { Route, Redirect } from 'react-router';
+import { Route } from 'react-router';
 import CheckoutSummary from '../components/Order/CheckoutSummary';
 import ContactData from './ContactData';
+
+
+
 const Checkout = (props) => {
 
     const [, setIngredients] = useState({});
@@ -35,7 +38,7 @@ const Checkout = (props) => {
 
     return (
         <div>
-            {props.ings ? 
+            {props.ings || props.purchased ? 
             <>
                 <CheckoutSummary 
                     ingredients={props.ings}
@@ -44,16 +47,17 @@ const Checkout = (props) => {
                 />
                 <Route path={props.match.path + '/contact-data'} component={ContactData} />
             </>
-                : <Redirect to="/" />}
+                : props.history.push('/')}
         </div>
     );
 }
 
 const mapStateToProps = state => {
     return {
-        ings: state.ingredients,
-        price: state.totalPrice
+        ings: state.burgerBuilder.ingredients,
+        price: state.burgerBuilder.totalPrice,
     }
 }
+
 
 export default connect(mapStateToProps)(Checkout);

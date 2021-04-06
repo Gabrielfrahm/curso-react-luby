@@ -38,3 +38,52 @@ export const purchaseBurger = (orderData) => {
             });
     }
 }
+
+export const purchaseInit = () => {
+    return {
+        type: actionTypes.PURCHASE_INIT
+    };
+}
+
+export const fetchOrdersSuccess = (orders) => {
+    return {
+        type: actionTypes.FETCH_ORDERS_SUCCESS,
+        orders: orders
+    }
+}
+
+export const fetchOrdersFail = (error) => {
+    return {
+        type: actionTypes.FETCH_ORDERS_SUCCESS,
+        error: error
+    }
+}
+
+export const fetchOrderStart = () => {
+    return {
+        type: actionTypes.PURCHASE_BURGER_START
+    }
+}
+
+export const fetchOrders = () => {
+    return dispatch => {
+        
+        api.get('/orders.json').then(
+            response => {
+                const orderList = [];
+                for(let key in response.data){
+                    orderList.push({
+                        ...response.data[key],
+                        id: key,
+                    });
+                   
+                }
+                dispatch(fetchOrdersSuccess(orderList))
+                
+            }
+        ).catch(err => {
+            
+            dispatch(fetchOrdersFail(err))
+        })
+    }
+}
