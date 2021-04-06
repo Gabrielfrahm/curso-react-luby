@@ -1,11 +1,14 @@
 import React, { useCallback, useState } from 'react';
 import Button from '../../components/UI/Button';
 import api from '../../axios-orders';
-import { useHistory } from 'react-router-dom';
+import WithErrorHandler from '../../hoc/WithErrorHendler'
+// import { useHistory } from 'react-router-dom';
 import { Container } from './styles';
 import Spinner from '../../components/UI/Spinner';
 import Input from '../../components/UI/Input';
 import { connect } from 'react-redux';
+import * as action from '../../store/actions/index'
+
 
 let orderForm = {
     name: {
@@ -92,8 +95,8 @@ let orderForm = {
 
 const ContactData = (props) => {
     const [, setOrder] = useState(orderForm);
-    const [loading, setLoading] = useState();
-    const history = useHistory();
+    // const [loading, setLoading] = useState();
+    // const history = useHistory();
 
 
     const checkValidity = (value, rules)=>{
@@ -109,7 +112,7 @@ const ContactData = (props) => {
 
     const handleOrder = useCallback((event) => {
         event.preventDefault();
-        setLoading(true);
+        // setLoading(true);
         const formData = {};
         for(let formElementIdentifier in  orderForm){
             formData[formElementIdentifier] = orderForm[formElementIdentifier].value;
@@ -119,17 +122,19 @@ const ContactData = (props) => {
             orderData: formData,
             price: props.price
         }
-        api.post(`/orders.json`, order).then(
-            response => {
-                setLoading(false);
-                history.push('/');
-            }
-        )
-            .catch(error => {
-                setLoading(false);
 
-            });
-    }, [props.ings, props.price,  history]);
+        props.onOrderBurger(order);
+        // api.post(`/orders.json`, order).then(
+        //     response => {
+        //         setLoading(false);
+        //         history.push('/');
+        //     }
+        // )
+        //     .catch(error => {
+        //         setLoading(false);
+
+        //     });
+    }, [props]);
     
 
     const handlerInput = useCallback((event, inputIdentifier)=>{
@@ -158,7 +163,7 @@ const ContactData = (props) => {
     return (
         <Container>
             <h4>Enter your Contact Data</h4>
-            {loading ? (
+            {props.loading ? (
                 <Spinner />
             ) : (
                 <form onSubmit={handleOrder}>
@@ -173,9 +178,7 @@ const ContactData = (props) => {
                             changed={(event) => handlerInput(event,fe.id)}
                         />
                     ))}
-                    <Button
-        
-                    >Order</Button>
+                    <Button>Order</Button>
                 </form>
             )}
 
@@ -188,7 +191,14 @@ const mapStateToProps = state => {
     return {
         ings: state.ingredients,
         price: state.totalPrice,
+        loading: state.loading,
     }
 }
 
-export default  connect(mapStateToProps)(ContactData);
+const mapDispatchToProps = dispatch => {
+    return {
+        onOrderBurger: (orderData) => dispatch(action.purchaseBurger(orderData))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps) (WithErrorHandler(ContactData, api));

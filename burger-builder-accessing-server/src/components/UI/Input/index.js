@@ -19,7 +19,7 @@ const Input = (props) => {
             </Select>
         break;
         default :
-            <input {...props.elementConfig} defaultValue={props.value} />
+            <input {...props.elementConfig} defaultValue={props.value} required />
     }
 
     return (

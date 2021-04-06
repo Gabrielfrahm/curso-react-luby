@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback,  useState } from 'react';
 import {connect} from 'react-redux';
 import { useHistory } from 'react-router';
 import api from '../axios-orders';
@@ -12,18 +12,12 @@ import WithErrorHandler from '../hoc/WithErrorHendler';
 import * as burgerBuilderAction from '../store/actions/index';
 
 
-
-// const states = {
-//     totalPrice: 4,
-// }
-
 const BurgerBuilder = (props) => {
-    // const [price, setPrice] = useState(states.totalPrice); 
+   
     const [purchasing, setPurchasing] = useState(false);
     const [loading, setLoading] = useState(false);
 
     const history = useHistory();
-
 
     const updatePurchaseState = ingredients => {
         const sum = Object.keys(ingredients)
@@ -48,12 +42,6 @@ const BurgerBuilder = (props) => {
         // alert('You continue');
         setLoading(true);
 
-        // const queryParams = [];
-        // for (let i in props.ings) {
-        //     queryParams.push(encodeURIComponent(i) + '=' + encodeURIComponent(props.ings[i]))
-        // }
-        // queryParams.push('price=' + props.price)
-        // const queryString = queryParams.join('&');
         history.push('/checkout');
     }
 
@@ -100,6 +88,7 @@ const mapStateToProps = state => {
     return {
         ings: state.ingredients,
         price: state.totalPrice,
+        error: state.error,
     }
 }
 
@@ -107,6 +96,7 @@ const mapDispatchToProps = dispatch => {
     return {
         onIngredientAdded : (ingName) => dispatch(burgerBuilderAction.addIngredient(ingName)),
         onIngredientRemoved: (ingName) => dispatch(burgerBuilderAction.removeIngredient(ingName)),
+        onInitIngredients: () => dispatch(burgerBuilderAction.initIngredients()),
     }
 }
 
