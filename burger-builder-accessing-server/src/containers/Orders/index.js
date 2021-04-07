@@ -9,12 +9,12 @@ import { connect } from 'react-redux';
 const Orders = (props) => {
 
     useEffect(()=> {
-        props.onFetchOrders();
+        props.onFetchOrders(props.token);
     },[]);
 
     return (
         <div>
-           {!props.loading ?
+           {!props.loading  ?
                  props.orders.map(order => (
                     <Order key={order.id} 
                         ingredients={order.ingredients}
@@ -30,13 +30,14 @@ const Orders = (props) => {
 const mapStateToProps = state => {
     return {
         orders: state.order.orders,
-        loading: state.order.loading
+        loading: state.order.loading,
+        token: state.auth.token
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        onFetchOrders: () => dispatch(actions.fetchOrders())
+        onFetchOrders: (token) => dispatch(actions.fetchOrders(token))
     }
 }
 

@@ -123,7 +123,7 @@ const ContactData = (props) => {
             price: props.price
         }
 
-        props.onOrderBurger(order);
+        props.onOrderBurger(order, props.token);
         history.push('/');
 
     }, [props, history]);
@@ -184,12 +184,13 @@ const mapStateToProps = state => {
         ings: state.burgerBuilder.ingredients,
         price: state.burgerBuilder.totalPrice,
         loading: state.order.loading,
+        token: state.auth.token,
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        onOrderBurger: (orderData) => dispatch(action.purchaseBurger(orderData))
+        onOrderBurger: (orderData, token) => dispatch(action.purchaseBurger(orderData,token))
     }
 }
 

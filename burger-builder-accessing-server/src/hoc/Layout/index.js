@@ -3,6 +3,7 @@ import Aux from '../Auxi';
 import SideDrawer from "../../components/Navigation/SideDrawer";
 import Toolbar from '../../components/Navigation/Toolbar';
 import {Content} from './styles';
+import { connect } from "react-redux";
 
 const Layout = (props) => {
     const [showSide, setShowSide] = useState(false);
@@ -17,8 +18,9 @@ const Layout = (props) => {
 
     return (
         <Aux>
-            <Toolbar drawerToggleClicked={handleSideToggle} />
+            <Toolbar isAuth={props.isAuthenticate} drawerToggleClicked={handleSideToggle} />
             <SideDrawer 
+                isAuth={props.isAuthenticate}
                 open={showSide} 
                 closed={handleSideDrawerClosed} 
             />
@@ -28,5 +30,10 @@ const Layout = (props) => {
         </Aux>
     )
 }
+const mapStateToProps = state => {
+    return {
+        isAuthenticate: state.auth.token !== null
+    }
+}
 
-export default Layout;
+export default connect(mapStateToProps)(Layout);

@@ -2,6 +2,7 @@ import React, {useCallback, useState} from 'react';
 import { connect } from 'react-redux';
 import Button from '../../components/UI/Button';
 import Input from '../../components/UI/Input';
+import Spinner from '../../components/UI/Spinner';
 
 import * as action from '../../store/actions/index';
 
@@ -39,6 +40,7 @@ import {Container} from './styles';
 
 const Auth = (props) => {
     const [,setState] = useState(controls);
+    const [signUp, setSignUp] = useState(true);
    
     const checkValidity = (value, rules)=>{
         let isValid = true;
@@ -73,7 +75,7 @@ const Auth = (props) => {
         })
     }
 
-    const form = formElementsArray.map(formElement => (
+    let form = formElementsArray.map(formElement => (
         <Input
             key={formElement.id}
             elementType={formElement.config.elementType}
@@ -84,28 +86,53 @@ const Auth = (props) => {
             changed={(event) => handlerInput(event, formElement.id)}
         />
         
-    ))
+    ));
+
+    if(props.loading){
+        form = <Spinner />
+    }
+
+    let errorMessage = null;
+
+    if(props.error) {
+        errorMessage = <p>{props.error.message}</p>
+        
+    }
 
     const handleSubmit = useCallback((event) => {
         event.preventDefault();
-        props.onAuth(controls.email.value,controls.password.value)
-    },[props])
+        props.onAuth(controls.email.value,controls.password.value, signUp)
+    },[props,signUp]);
+
+
+    const handleSwitchAuthMode = useCallback(()=>{
+        setSignUp(!signUp);
+    }, [signUp]);
 
     return (
         <Container>
+            {errorMessage}
             <form onSubmit={handleSubmit}>
                 {form}
             <Button>SUBMIT</Button>
             </form>
+            <Button clicked={handleSwitchAuthMode} btnType="Danger">SWITCH TO {signUp ? 'SIGN IN' : 'SIGN UP'}</Button>
         </Container>
     )
 }
 
+const mapStateToProps = state => {
+    return {
+        loading: state.auth.loading,
+        error: state.auth.error,
+    }
+}
+
 const mapDispatchToProps = dispatch => {
     return {
-        onAuth: (email,password) => dispatch(action.auth(email,password)),
+        onAuth: (email,password, signUp) => dispatch(action.auth(email,password, signUp)),
     }
 }
 
 
-export default connect(null, mapDispatchToProps)(Auth);
+export default connect(mapStateToProps, mapDispatchToProps)(Auth);
