@@ -112,7 +112,7 @@ const ContactData = (props) => {
 
     const handleOrder = useCallback((event) => {
         event.preventDefault();
-        // setLoading(true);
+        
         const formData = {};
         for(let formElementIdentifier in  orderForm){
             formData[formElementIdentifier] = orderForm[formElementIdentifier].value;
@@ -125,16 +125,7 @@ const ContactData = (props) => {
 
         props.onOrderBurger(order);
         history.push('/');
-        // api.post(`/orders.json`, order).then(
-        //     response => {
-        //         setLoading(false);
-        //         history.push('/');
-        //     }
-        // )
-        //     .catch(error => {
-        //         setLoading(false);
 
-        //     });
     }, [props, history]);
     
 
