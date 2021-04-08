@@ -1,5 +1,6 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 import Button from '../../components/UI/Button';
 import Input from '../../components/UI/Input';
 import Spinner from '../../components/UI/Spinner';
@@ -41,6 +42,13 @@ import {Container} from './styles';
 const Auth = (props) => {
     const [,setState] = useState(controls);
     const [signUp, setSignUp] = useState(true);
+
+
+    useEffect(() => {
+        if(!props.burgerBuilder && props.authRedirectPath !== '/'){
+            props.onSetAuthRedirectPath();
+        }
+    },[props])
    
     const checkValidity = (value, rules)=>{
         let isValid = true;
@@ -96,7 +104,11 @@ const Auth = (props) => {
 
     if(props.error) {
         errorMessage = <p>{props.error.message}</p>
-        
+    }
+
+    let authRedirect= null;
+    if(props.isAuthenticated){
+        authRedirect = <Redirect  to={props.authRedirectPath}/>
     }
 
     const handleSubmit = useCallback((event) => {
@@ -117,6 +129,7 @@ const Auth = (props) => {
             <Button>SUBMIT</Button>
             </form>
             <Button clicked={handleSwitchAuthMode} btnType="Danger">SWITCH TO {signUp ? 'SIGN IN' : 'SIGN UP'}</Button>
+            {authRedirect}
         </Container>
     )
 }
@@ -125,12 +138,16 @@ const mapStateToProps = state => {
     return {
         loading: state.auth.loading,
         error: state.auth.error,
+        isAuthenticated: state.auth.token !== null,
+        building: state.burgerBuilder.building,
+        authRedirectPath : state.auth.authRedirectPath,
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
         onAuth: (email,password, signUp) => dispatch(action.auth(email,password, signUp)),
+        onSetAuthRedirectPath: () => dispatch(action.setAuthRedirectPath('/')),
     }
 }
 

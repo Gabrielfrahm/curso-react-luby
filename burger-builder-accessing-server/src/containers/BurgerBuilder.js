@@ -31,8 +31,13 @@ const BurgerBuilder = (props) => {
       };
 
     const handlePurchase = useCallback(() => {
-        setPurchasing(true);
-    }, []);
+        if(props.isAuthenticated){
+            setPurchasing(true);
+        }else{
+            props.onSetAuthRedirectPath('/checkout');
+            history.push('/auth')
+        }
+    }, [history, props]);
 
     const handlePurchaseCancel = useCallback(() => {
         setPurchasing(false);
@@ -73,6 +78,7 @@ const BurgerBuilder = (props) => {
             </Modal>
             <Burger ingredients={props.ings} price={props.price} />
             <BuildControls
+                isAuth={props.isAuthenticated}
                 ingredientAdded={props.onIngredientAdded}
                 ingredientRemoved={props.onIngredientRemoved}
                 disabled={disabledInfo}
@@ -90,6 +96,7 @@ const mapStateToProps = state => {
         price: state.burgerBuilder.totalPrice,
         error: state.burgerBuilder.error,
         purchased: state.order.purchased,
+        isAuthenticated: state.auth.token !== null,
     }
 }
 
@@ -99,6 +106,7 @@ const mapDispatchToProps = dispatch => {
         onIngredientRemoved: (ingName) => dispatch(actions.removeIngredient(ingName)),
         onInitIngredients: () => dispatch(actions.initIngredients()),
         onInitPurchase: () => dispatch(actions.purchaseInit()),
+        onSetAuthRedirectPath : (path) => dispatch(actions.setAuthRedirectPath(path))
     }
 }
 

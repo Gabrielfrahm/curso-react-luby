@@ -65,10 +65,10 @@ export const fetchOrderStart = () => {
     }
 }
 
-export const fetchOrders = (token) => {
+export const fetchOrders = (token, userId) => {
     return dispatch => {
-        
-        api.get(`/orders.json?auth=${token}`).then(
+        const queryParams = `?auth=${token}&orderBy="userId"&equalTo="${userId}"`
+        api.get(`/orders.json${queryParams}`).then(
             response => {
                 const orderList = [];
                 for(let key in response.data){
